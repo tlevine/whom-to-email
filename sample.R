@@ -15,7 +15,7 @@ people$name <- sub(' .*', '', sub('alias ', '', people$raw))
 people$address <- sub('.* <?([^ >]+)>?$', '\\1', people$raw)
 
 # Weight the probabilities.
-prob.numerator <- sqrt(counts$personal)
+prob.numerator <- min(0, sqrt(counts$personal.old) - counts$personal.new)
 
 # Take the sample, using the file as a seed.
 set.seed(sum(counts[-1]))
