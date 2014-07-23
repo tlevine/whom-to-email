@@ -45,6 +45,27 @@ if (require(ggplot2)) {
     scale_color_discrete('Recent email?') +
     geom_text() + scale_x_log10('Old emails') + scale_y_continuous('Sampling weight')
   ggsave(sub('counts','weights.pdf', counts.file), p, width = 8.5, height = 14, units = 'in')
+
+  # The weight should change noticably
+  counts.bumped <- counts
+  for (column in c('everything','personal.new')) {
+    counts.bumped[,column] <- counts.bumped[,column] + 1
+  }
+  weight.changes <- data.frame(
+    address = counts$address,
+    present = weights(counts),
+    bumped = weights(counts.bumped),
+    recent.contact = counts$recent.contact
+  )
+  p <- ggplot(weight.changes) +
+    aes(x = present, y = bumped, color = recent.contact, label = address) +
+    scale_color_discrete('Recent email?') +
+    geom_text() +
+    coord_equal() +
+    scale_x_continuous('Present weight') +
+    scale_y_continuous('Weight if I sent another email') +
+    ggtitle('Do the weights change when I send more emails?')
+  ggsave(sub('counts','weight-changes.pdf', counts.file), p, width = 9, height = 9, units = 'in')
 }
 
 cat('Email the first of these people whom you haven\'t seen recently.\n\n')
