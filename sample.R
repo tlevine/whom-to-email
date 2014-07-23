@@ -10,7 +10,7 @@ people.file <- '~/.mutt/aliases/people'
 #' but haven't it a while. It should substantially lower the weight
 #' of someone whom I've just emailed.
 weights <- function(counts) {
-    (pmax(0, (counts$personal.old - counts$personal.new) / sqrt(counts$everything + 1)))
+    (pmax(0, (counts$personal.old^(1/2) - counts$personal.new) / sqrt(pmax(1, counts$everything))))
 }
 
 # Open the files.
@@ -49,7 +49,7 @@ if (require(ggplot2)) {
   # The weight should change noticably
   counts.bumped <- counts
   for (column in c('everything','personal.new')) {
-    counts.bumped[,column] <- counts.bumped[,column] + 1
+    counts.bumped[,column] <- counts[,column] + 1
   }
   weight.changes <- data.frame(
     address = counts$address,
