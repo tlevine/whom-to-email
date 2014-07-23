@@ -8,3 +8,7 @@ The colloquial use of the word "random" tends to imply random
 sampling with equal probabilties, but I want to do something
 a bit more involved; the present system selects the person
 to email based on my previous email communications.
+
+How to use ::
+
+    make
