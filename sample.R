@@ -4,9 +4,13 @@
 counts.file <- 'data/2014-07-23/counts' # argv[1] would be better
 people.file <- '~/.mutt/aliases/people'
 
-# The weighting function
+#' The weighting function
+#'
+#' This function should weight highly people whom I want to email
+#' but haven't it a while. It should substantially lower the weight
+#' of someone whom I've just emailed.
 weights <- function(counts) {
-    sqrt(pmax(0, (counts$personal.old - counts$personal.new) / sqrt(counts$everything + 1)))
+    (pmax(0, (counts$personal.old - counts$personal.new) / sqrt(counts$everything + 1)))
 }
 
 # Open the files.
