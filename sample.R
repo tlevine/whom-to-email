@@ -6,7 +6,7 @@ people.file <- '~/.mutt/aliases/people'
 
 # The weighting function
 weights <- function(counts) {
-    pmax(0, (counts$personal.old)^(1/4) - counts$personal.new)
+    pmax(0, (counts$personal.old)^(1/4) - (counts$personal.new)^(1/2) )
 }
 
 # A plot that can be helpful for tuning the weight function
@@ -18,7 +18,7 @@ tune.weights <- function() {
     aes(x = personal.old, y = personal.new, label = address) +
     geom_text() + scale_x_log10('Old') + scale_y_log10('New')
 
-  counts$recent.contact <- factor(counts$personal.new == 0, levels = c(TRUE,FALSE))
+  counts$recent.contact <- factor(counts$personal.new > 0, levels = c(TRUE,FALSE))
   levels(counts$recent.contact) <- c('Yes','No')
 
   p2 <- ggplot(counts) +
