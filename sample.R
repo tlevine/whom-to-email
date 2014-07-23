@@ -20,4 +20,6 @@ addresses <- sample(counts$address, 8, prob = prob.numerator)
 
 # Emit the result.
 pattern <- paste(addresses, collapse = '|')
-print(people[grep(pattern, people$address),])
+
+cat('Email the first of these people whom you haven\'t seen recently.')
+cat(paste0(paste(people[grep(pattern, people$address),'name'], collapse = '\n'), '\n'))
