@@ -6,7 +6,7 @@ people.file <- '~/.mutt/aliases/people'
 
 # The weighting function
 weights <- function(counts) {
-    sqrt(counts$personal.old) - counts$personal.new
+    pmax(0, (counts$personal.old)^(1/4) - counts$personal.new)
 }
 
 # A plot that can be helpful for tuning the weight function
@@ -46,7 +46,7 @@ people$name <- sub(' .*', '', sub('alias ', '', people$raw))
 people$address <- sub('.* <?([^ >]+)>?$', '\\1', people$raw)
 
 # Weight the probabilities.
-prob.numerator <- pmax(0, weights(counts))
+prob.numerator <- weights(counts)
 
 # Take the sample, using the file as a seed.
 set.seed(sum(counts[-1]))
