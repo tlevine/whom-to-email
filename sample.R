@@ -1,20 +1,23 @@
 #!/usr/bin/env Rscript
 
-# Inputs: The file of counts, and the number of addresses to sample
-filename <- 'data/2014-07-23/counts' # argv[1] would be better
-size <- 10
+# The file of counts, and the number of addresses to sample
+counts.file <- 'data/2014-07-23/counts' # argv[1] would be better
+people.file <- '~/.mutt/aliases/people'
 
-# Open the file.
-counts <- read.csv(filename, sep = '\t', stringsAsFactors = FALSE)
-
+# Open the files.
+counts <- read.csv(counts.file, sep = '\t', stringsAsFactors = FALSE)
+connection <- file(people.file)
+people <- data.frame(raw = readLines(connection))
+people$name <- sub(' .*', '', sub('alias ', '', people$raw))
+people$address <- sub('.* <?([^ >]+)>?$', '\\1', people$raw)
 
 # Weight the probabilities.
 prob.numerator <- sqrt(counts$personal)
 
 # Take the sample, using the file as a seed.
-seed <- sum(counts[-1])
-set.seed(seed)
-address <- sample(counts$address, size, prob = prob.numerator)
+set.seed(sum(counts[-1]))
+addresses <- sample(counts$address, 8, prob = prob.numerator)
 
 # Emit the result.
-cat(address, '\n')
+pattern <- paste(addresses, collapse = '|')
+print(people[grep(pattern, people$address),])
