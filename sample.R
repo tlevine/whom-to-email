@@ -8,6 +8,9 @@ people.file <- '~/.mutt/aliases/people'
 counts <- read.csv(counts.file, sep = '\t', stringsAsFactors = FALSE)
 connection <- file(people.file)
 people <- data.frame(raw = readLines(connection))
+close(connection)
+
+# Parse the mutt file.
 people$name <- sub(' .*', '', sub('alias ', '', people$raw))
 people$address <- sub('.* <?([^ >]+)>?$', '\\1', people$raw)
 
@@ -21,5 +24,5 @@ addresses <- sample(counts$address, 8, prob = prob.numerator)
 # Emit the result.
 pattern <- paste(addresses, collapse = '|')
 
-cat('Email the first of these people whom you haven\'t seen recently.')
+cat('Email the first of these people whom you haven\'t seen recently.\n\n')
 cat(paste0(paste(people[grep(pattern, people$address),'name'], collapse = '\n'), '\n'))
