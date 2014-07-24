@@ -12,10 +12,11 @@ people.file <- '~/.mutt/aliases/people'
 #' This function should weight highly people whom I want to email
 #' but haven't it a while. It should substantially lower the weight
 #' of someone whom I've just emailed.
-weights <- function(counts, recent.coefficient = .1, old.intercept = -3) {
+weights <- function(counts, recent.coefficient = .3, old.intercept = -4) {
   (pmax(0,(
-    pmax(1,(counts$personal.old + old.intercept)) ^ (1/2) *
-    sapply(counts$personal.new, function(x) if (x==0) 1 else recent.coefficient)
+    pmax(1,(counts$personal.old + old.intercept)) ^ (1/2) * # more old emails makes weight higher
+    pmax(1,counts$personal.new) ^ (-2) * # more recent emails makes weight lower
+    sapply(counts$personal.new, function(x) if (x==0) 1 else recent.coefficient) # any recent emails lowers
   # pmax(1,counts$everything)   ^ (-1/2)
     )))
 }
@@ -77,5 +78,11 @@ if (require(ggplot2)) {
   ggsave(sub('counts','weight-changes-anonymous.pdf', counts.file), p + geom_point(), width = 9, height = 9, units = 'in')
 }
 
-cat('Email the first of these people whom you haven\'t seen recently.\n\n')
+cat(
+'Email the first person listed here,
+unless that doesn\'t make sense, in
+which case you should keep going down
+the list.
+
+')
 cat(paste0(paste(people[grep(pattern, people$address),'name'], collapse = '\n'), '\n'))
