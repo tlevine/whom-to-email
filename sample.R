@@ -2,7 +2,9 @@
 
 # The file of counts, and the number of addresses to sample
 argv <- commandArgs(trailingOnly = TRUE)
-counts.file <- argv[1] # 'data/2014-07-23/counts'
+if (len(argv) > 0) {
+  counts.file <- argv[1] # 'data/2014-07-23/counts'
+}
 people.file <- '~/.mutt/aliases/people'
 
 #' The weighting function
