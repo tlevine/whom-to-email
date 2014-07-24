@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 
 # The file of counts, and the number of addresses to sample
-counts.file <- 'data/2014-07-23/counts' # argv[1] would be better
+argv <- commandArgs(trailingOnly = TRUE)
+counts.file <- argv[1] # 'data/2014-07-23/counts'
 people.file <- '~/.mutt/aliases/people'
 
 #' The weighting function

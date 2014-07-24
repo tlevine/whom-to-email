@@ -2,6 +2,8 @@ directory := data/$(shell date --rfc-3339=date)
 
 	
 
+$(directory)/sample: $(directory)/counts
+	./sample.R $(directory)/names > $(directory)/sample
 $(directory)/counts: $(directory)/names
 	./search.sh < $(directory)/names > $(directory)/counts
 $(directory)/names: $(directory)
