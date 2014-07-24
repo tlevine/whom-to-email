@@ -34,3 +34,15 @@ whether you came up with a decent weighting.
 
 The entry point for the whole thing is the ``Makefile``,
 so start there if you want to change anything else.
+
+Things to try
+==============
+
+* Get separate fields for messages from me and messages
+  to me, and weight people based on that. My guess is
+  that people with similar numbers for both of these are
+  more of the sort that I want to email.
+* Come up with some way of checking that the weighting is
+  good other than doing the random sampling a bunch of
+  times.
+* Deal with people who have changed email addresses.
