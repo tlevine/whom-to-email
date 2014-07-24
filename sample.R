@@ -10,7 +10,11 @@ people.file <- '~/.mutt/aliases/people'
 #' but haven't it a while. It should substantially lower the weight
 #' of someone whom I've just emailed.
 weights <- function(counts) {
-    (pmax(0, (counts$personal.old^(1/2) - counts$personal.new) / sqrt(pmax(1, counts$everything))))
+  (pmax(0,(
+    counts$personal.old^(1/2) *
+    counts$personal.new^(-2) *
+    counts$everything^(-1/2)
+    )))
 }
 
 # Open the files.
