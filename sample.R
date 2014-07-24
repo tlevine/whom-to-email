@@ -12,10 +12,10 @@ people.file <- '~/.mutt/aliases/people'
 #' This function should weight highly people whom I want to email
 #' but haven't it a while. It should substantially lower the weight
 #' of someone whom I've just emailed.
-weights <- function(counts) {
+weights <- function(counts, recent.coefficient = .1, old.intercept = -3) {
   (pmax(0,(
-    pmax(1,counts$personal.old) ^ (1/2) *
-    sapply(counts$personal.new, function(x) if (x==0) 1 else .1)
+    pmax(1,(counts$personal.old + old.intercept)) ^ (1/2) *
+    sapply(counts$personal.new, function(x) if (x==0) 1 else recent.coefficient)
   # pmax(1,counts$everything)   ^ (-1/2)
     )))
 }
@@ -50,8 +50,9 @@ if (require(ggplot2)) {
   p <- ggplot(counts) +
     aes(x = personal.old, y = weights(counts), color = recent.contact, label = address) +
     scale_color_discrete('Recent email?') +
-    geom_text() + scale_x_log10('Old emails') + scale_y_continuous('Sampling weight')
-  ggsave(sub('counts','weights.pdf', counts.file), p, width = 8.5, height = 14, units = 'in')
+    scale_x_log10('Old emails') + scale_y_continuous('Sampling weight')
+  ggsave(sub('counts','weights.pdf', counts.file), p + geom_text(), width = 8.5, height = 14, units = 'in')
+  ggsave(sub('counts','weights-anonymous.pdf', counts.file), p + geom_point(), width = 8.5, height = 14, units = 'in')
 
   # The weight should change noticably
   counts.bumped <- counts
@@ -67,13 +68,13 @@ if (require(ggplot2)) {
   p <- ggplot(weight.changes) +
     aes(x = present, y = bumped, color = recent.contact, label = address) +
     scale_color_discrete('Recent email?') +
-    geom_text() +
   # coord_equal() +
     geom_abline(intercept = 0, slope = 1) +
     scale_x_continuous('Present weight') +
     scale_y_continuous('Weight if I sent another email') +
     ggtitle('Do the weights change when I send more emails?')
-  ggsave(sub('counts','weight-changes.pdf', counts.file), p, width = 9, height = 9, units = 'in')
+  ggsave(sub('counts','weight-changes.pdf', counts.file), p + geom_text(), width = 9, height = 9, units = 'in')
+  ggsave(sub('counts','weight-changes-anonymous.pdf', counts.file), p + geom_point(), width = 9, height = 9, units = 'in')
 }
 
 cat('Email the first of these people whom you haven\'t seen recently.\n\n')
