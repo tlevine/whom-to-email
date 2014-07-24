@@ -2,7 +2,7 @@
 
 # The file of counts, and the number of addresses to sample
 argv <- commandArgs(trailingOnly = TRUE)
-if (len(argv) > 0) {
+if (length(argv) > 0) {
   counts.file <- argv[1] # 'data/2014-07-23/counts'
 }
 people.file <- '~/.mutt/aliases/people'
@@ -14,9 +14,9 @@ people.file <- '~/.mutt/aliases/people'
 #' of someone whom I've just emailed.
 weights <- function(counts) {
   (pmax(0,(
-    counts$personal.old^(1/2) *
-    counts$personal.new^(-2) *
-    counts$everything^(-1/2)
+    pmax(1,counts$personal.old) ^ (1/2) *
+    sapply(counts$personal.new, function(x) if (x==0) 1 else .1)
+  # pmax(1,counts$everything)   ^ (-1/2)
     )))
 }
 
@@ -68,7 +68,8 @@ if (require(ggplot2)) {
     aes(x = present, y = bumped, color = recent.contact, label = address) +
     scale_color_discrete('Recent email?') +
     geom_text() +
-    coord_equal() +
+  # coord_equal() +
+    geom_abline(intercept = 0, slope = 1) +
     scale_x_continuous('Present weight') +
     scale_y_continuous('Weight if I sent another email') +
     ggtitle('Do the weights change when I send more emails?')
