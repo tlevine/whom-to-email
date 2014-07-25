@@ -1,8 +1,10 @@
 directory := data/$(shell date --rfc-3339=date)
 
-.PHONY: conky
+.PHONY: conky display
 
-conky:
+display:  $(directory)/sample
+	cat $(directory)/sample
+conky: $(directory)/sample
 	sed -n -e 's/\./ /g' -e '6,$$ s/^/  /p' $(directory)/sample 
 $(directory)/sample: $(directory)/counts
 	./sample.R $(directory)/counts > $(directory)/sample
