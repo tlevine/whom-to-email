@@ -1,7 +1,9 @@
 directory := data/$(shell date --rfc-3339=date)
 
-	
+.PHONY: conky
 
+conky: $(directory)/sample
+	cat $(directory)/sample
 $(directory)/sample: $(directory)/counts
 	./sample.R $(directory)/counts > $(directory)/sample
 $(directory)/counts: $(directory)/names
