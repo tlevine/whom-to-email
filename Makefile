@@ -1,4 +1,4 @@
-directory := data/$(shell date --rfc-3339=date)
+directory := data/$(shell date +%Y-%m-%d)
 
 .PHONY: conky display
 
