@@ -31,12 +31,8 @@ close(connection)
 people$name <- sub(' .*', '', sub('alias ', '', people$raw))
 people$address <- sub('.* <?([^ >]+)>?$', '\\1', people$raw)
 
-# Weight the probabilities.
-prob.numerator <- weights(counts)
-
-# Take the sample, using the file as a seed.
-set.seed(sum(counts[-1]))
-addresses <- sample(counts$address, 8, prob = prob.numerator)
+# Choose the highest-weighted people.
+addresses <- counts$address[order(weights(counts), decreasing = TRUE)][1:8]
 
 # Emit the result.
 pattern <- paste(addresses, collapse = '|')

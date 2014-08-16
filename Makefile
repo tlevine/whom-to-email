@@ -2,12 +2,12 @@ directory := data/$(shell date --rfc-3339=date)
 
 .PHONY: conky display
 
-display:  $(directory)/sample
-	cat $(directory)/sample
-conky: $(directory)/sample
-	sed -n -e 's/\./ /g' -e '6,$$ s/^/  /p' $(directory)/sample 
-$(directory)/sample: $(directory)/counts
-	./sample.R $(directory)/counts > $(directory)/sample
+display:  $(directory)/weight
+	cat $(directory)/weight
+conky: $(directory)/weight
+	sed -n -e 's/\./ /g' -e '6,$$ s/^/  /p' $(directory)/weight 
+$(directory)/weight: $(directory)/counts
+	./weight.R $(directory)/counts > $(directory)/weight
 $(directory)/counts: $(directory)/names
 	./search.sh < $(directory)/names > $(directory)/counts
 $(directory)/names: $(directory)
