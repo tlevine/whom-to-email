@@ -8,17 +8,21 @@ I tried mass-producing emails in hopes that I would benefit
 from economies of scale, but that felt a bit stressful and complicated and
 unnatural. So I'm going to try doing hand-crafted artisinal
 emails instead. More specifically, I'm periodically (like
-weekly or daily) going to choose a person at random to email.
+weekly or daily) going to choose a person to email.
 
-Sampling method
+Selection method
 =================
-The colloquial use of the word "random" tends to imply random
-sampling with equal probabilties, but I want to do something
-a bit more involved; the present system selects the person
-to email based on my previous email communications.
+I want to focus on people that I am losing touch with.
+I'm selecting people based on my prior emails with them.
+My goal is to select people who I know very well and
+haven't talked to in a while.
 
-My goal is to put higher weights on people who I know very
-well and haven't talked to in a while.
+The present system looks for people whom I've emailed
+a lot before but haven't emailed with in a while; it
+comes up with a number that is high if I used to email
+people a lot and haven't emailed people in a while.
+And then it tells me to email the person whose number
+is highest.
 
 How to use
 ==============
@@ -27,8 +31,8 @@ To select a person, just run ``make``.
 You (I) will probably want to edit the weighting function
 quite a bit. The function is just something I made up, not
 based on any interesting theory or training data. Edit it
-by editing the ``weights`` function in ``sample.R``.
-Then run ``sample.R`` and look at the
+by editing the ``weights`` function in ``weight.R``.
+Then run ``weight.R`` and look at the
 ``data/*/weight{-change,}s.pdf`` files to get a feel for
 whether you came up with a decent weighting.
 
@@ -42,7 +46,5 @@ Things to try
   to me, and weight people based on that. My guess is
   that people with similar numbers for both of these are
   more of the sort that I want to email.
-* Come up with some way of checking that the weighting is
-  good other than doing the random sampling a bunch of
-  times.
+* Come up with some way of checking that the weighting works.
 * Deal with people who have changed email addresses.
