@@ -37,6 +37,7 @@ while read address; do
   fi
 
   score=$(max 0 $(echo "$x1 * $x2 * $x3" | bc -l))
+  name=$(grep "${address}" ~/.mutt/aliases/people | cut -d \  -f 2)
 
-  echo "${score},${address}"
+  echo "${score},${name}"
 done < /dev/stdin
