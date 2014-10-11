@@ -20,15 +20,11 @@ while read address; do
   personal_new=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:6W..")
   personal_old=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:..6W")
 
+  x1=$(echo "sqrt($personal_old + $OLD)" | bc -l)
+  x2=$(max 1 $(echo "1 / ($personal_new) ^ (2)" | bc -l)) # more recent emails makes weight lower
+  x3=$(echo "$personal_new == 0" | bc)
 
-  x1=$(max $(( ($personal_old + $OLD) ** (1/2) )))
-  x2=$(max $(( ($personal_new ** (2)) )))
-  if test $personal_new -eq 0; then
-    x3=$PRECISION
-  else
-    echo $RECENT
-    x3=$(($PRECISION * $RECENT))
-  fi
+  score=$(max 0 $(echo "$x1 * $x2 * $x3 | bc -l"))
 
-  echo "${address}", $(max 0 $(( ($x1 * $x2 * $x3) / ($PRECISION ** 3) )) )
+  echo "${address},${score}"
 done < /dev/stdin
