@@ -2,8 +2,8 @@ directory := data/$(shell date +%Y-%m-%d)
 
 .PHONY: conky display most-recent
 
-display:  $(directory)/weight
-	sort -rn $(directory)/weight | head | cut -d, -f2
+display:  $(directory)/weight most-recent
+	sleep 0
 most-recent:
 	sort -rn $$(ls -d data/2*[0-9]|tail -n1)/weight | head | cut -d, -f2
 $(directory)/weight: $(directory)/addresses
