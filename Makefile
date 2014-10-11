@@ -3,9 +3,9 @@ directory := data/$(shell date +%Y-%m-%d)
 .PHONY: conky display most-recent
 
 display:  $(directory)/weight
-	tail $(directory)/weight
+	sort -rn $(directory)/weight | head
 most-recent:
-	tail $$(ls -d data/2*|tail -n1)/weight
+	$$(ls -d data/2*|tail -n1)/weight | sort -rn | head
 $(directory)/weight: $(directory)/names
 	notmuch new
 	./search.sh < $(directory)/names > $(directory)/weight
