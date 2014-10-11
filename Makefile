@@ -3,17 +3,13 @@ directory := data/$(shell date +%Y-%m-%d)
 .PHONY: conky display most-recent
 
 display:  $(directory)/weight
-	cat $(directory)/weight
+	sort -rn $(directory)/weight | head | cut -d, -f2
 most-recent:
-	cat $$(ls -d data/2*|tail -n1)/weight
-conky: $(directory)/weight
-	sed -n -e 's/\./ /g' -e '6,$$ s/^/  /p' $(directory)/weight 
-$(directory)/weight: $(directory)/counts
-	./weight.R $(directory)/counts > $(directory)/weight
-$(directory)/counts: $(directory)/names
+	$$(ls -d data/2*|tail -n1)/weight | sort -rn | head | cut -d, -f2
+$(directory)/weight: $(directory)/addresses
 	notmuch new
-	./search.sh < $(directory)/names > $(directory)/counts
-$(directory)/names: $(directory)
-	cat ~/.mutt/aliases/people | sed -e 's/>\? *$$//' -e 's/^.* <\?//g' > $(directory)/names
+	./search.sh < $(directory)/addresses > $(directory)/weight
+$(directory)/addresses: $(directory)
+	cat ~/.mutt/aliases/people | sed -e 's/>\? *$$//' -e 's/^.* <\?//g' > $(directory)/addresses
 $(directory):
 	mkdir -p $(directory)

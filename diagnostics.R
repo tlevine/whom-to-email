@@ -1,12 +1,5 @@
 #!/usr/bin/env Rscript
 
-# The file of counts, and the number of addresses to sample
-argv <- commandArgs(trailingOnly = TRUE)
-if (length(argv) > 0) {
-  counts.file <- argv[1] # 'data/2014-07-23/counts'
-}
-people.file <- '~/.mutt/aliases/people'
-
 #' The weighting function
 #'
 #' This function should weight highly people whom I want to email
