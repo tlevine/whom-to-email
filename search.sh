@@ -24,12 +24,13 @@ while read address; do
   x1=$(echo "sqrt($personal_old + $OLD)" | bc -l)
   if test "${personal_new}" -eq 0; then
     x2=1
+    x3=1
   else
     x2=$(max 1 $(echo "${personal_new} ^ (-2)" | bc -l)) # more recent emails makes weight lower
-    x3=$(echo "$personal_new == 0" | bc)
+    x3="${RECENT}"
   fi
 
-# score=$(max 0 $(echo "$x1 * $x2 * $x3 | bc -l"))
+  score=$(max 0 $(echo "$x1 * $x2 * $x3" | bc -l))
 
   echo "${address},${score}"
 done < /dev/stdin
