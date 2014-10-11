@@ -21,7 +21,13 @@ while read address; do
   personal_new=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:6W..")
   personal_old=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:..6W")
 
-  x1=$(echo "sqrt($personal_old + $OLD)" | bc -l)
+  adjusted_old=$(echo "${personal_old} + ${OLD}" | bc -l)
+  if test 1 -eq $(echo "${adjusted_old} < 0" | bc -l); then
+    x1=0
+  else
+    x1=$(echo "sqrt(${adjusted_old})" | bc -l)
+  fi
+
   if test "${personal_new}" -eq 0; then
     x2=1
     x3=1
@@ -32,5 +38,5 @@ while read address; do
 
   score=$(max 0 $(echo "$x1 * $x2 * $x3" | bc -l))
 
-  echo "${address},${score}"
+  echo "${score},${address}"
 done < /dev/stdin
