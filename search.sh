@@ -4,6 +4,7 @@ set -e
 # Weighting coefficients
 RECENT=.3
 OLD=-4
+DATE_CUTOFF=16W
 
 max() {
   for current in "$@"; do
@@ -18,8 +19,8 @@ max() {
 
 while read address; do
   everything=$(notmuch count "${address}")
-  personal_new=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:6W..")
-  personal_old=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:..6W")
+  personal_new=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:${DATE_CUTOFF}..")
+  personal_old=$(notmuch count "to:${address} and (from:thomas or from:levine) and date:..${DATE_CUTOFF}")
 
   adjusted_old=$(echo "${personal_old} + ${OLD}" | bc -l)
   if test 1 -eq $(echo "${adjusted_old} < 0" | bc -l); then
